@@ -1,6 +1,8 @@
 # Futuristic Ollama Chat
 
-![Futuristic Ollama Chat UI](./ui.png)
+<p align="center">
+  <img src="./ui.png" alt="Futuristic Ollama Chat UI" width="500"/>
+</p>
 
 A sleek, futuristic-themed AI chat application powered by Ollama for local large language model integration. Built with a Python/FastAPI backend using Pydantic AI, and a dynamic TypeScript frontend.
 
