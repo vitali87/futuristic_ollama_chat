@@ -3,6 +3,7 @@
 
 console.log("chat_app.ts module execution started"); // New log
 
+// @ts-ignore 
 import { marked } from 'https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.0/lib/marked.esm.js'
 const convElement = document.getElementById('conversation')
 const promptInput = document.getElementById('prompt-input') as HTMLTextAreaElement
@@ -158,8 +159,8 @@ function onError(error: any) {
   // Try to make the error visible in the UI in the simplest way possible
   const errEl = document.getElementById('error');
   if (errEl) {
-    errEl.textContent = "BASIC onError CALLED. See console if anything else appears.";
-    errEl.classList.remove('d-none');
+    // errEl.textContent = "BASIC onError CALLED. See console if anything else appears."; // Keep original or make more specific if needed
+    // errEl.classList.remove('d-none'); // Prevent unhiding for this generic handler
   } else {
     // If errEl is null, this alert is a last resort to show onError was called
     alert("onError called, but error div not found!");
@@ -204,41 +205,76 @@ if (formElement) {
     formElement.addEventListener('submit', (e: Event) => onSubmit(e as SubmitEvent).catch(onError))
 }
 
+// Handle Enter key for sending message, Shift+Enter for newline
+if (promptInput && formElement) {
+    promptInput.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent newline
+            // Check if formElement is still valid before submitting
+            const currentForm = document.getElementById('chat-form') as HTMLFormElement;
+            if (currentForm) {
+                currentForm.requestSubmit();
+            } else {
+                console.error("Chat form not found for Enter key submission.");
+            }
+        }
+        // Shift+Enter will behave as default (newline)
+    });
+}
+
 // load messages on page load
 if (errorElement) errorElement.classList.add('d-none'); // Hide error initially
 fetch('/chat/').then(onFetchResponse).catch(onError)
 
 // Populate model dropdown
 const DEFAULT_FRONTEND_MODEL = 'qwen2.5vl:72b-q4_K_M'; // Fallback if needed
+const SAVED_MODEL_KEY = 'selectedOllamaModel';
 
 async function populateModels() {
-    if (!modelSelectElement) return;
+    if (!modelSelectElement) { 
+        console.log("[populateModels] modelSelectElement is null, returning.");
+        return;
+    }
+
+    const savedModel = localStorage.getItem(SAVED_MODEL_KEY);
+    console.log(`[populateModels] Attempting to load. Saved model from localStorage ('${SAVED_MODEL_KEY}'):`, savedModel);
+
     try {
         const response = await fetch('/models/');
         if (response.ok) {
             const models: string[] = await response.json();
-            modelSelectElement.innerHTML = ''; // Clear existing options (like "Loading...")
+            console.log("[populateModels] Fetched models:", models); 
+            modelSelectElement.innerHTML = ''; // Clear existing options
+
             if (models.length === 0) {
                 const option = document.createElement('option');
                 option.value = DEFAULT_FRONTEND_MODEL;
                 option.textContent = DEFAULT_FRONTEND_MODEL + " (default - no models found)";
                 option.selected = true;
                 modelSelectElement.appendChild(option);
+                console.log("[populateModels] No models fetched. Setting default:", DEFAULT_FRONTEND_MODEL);
             } else {
-                let defaultModelFound = false;
+                let modelToSelect = savedModel;
+                if (!modelToSelect || !models.includes(modelToSelect)) {
+                    console.log(`[populateModels] Saved model '${savedModel}' not valid or not in fetched list. Falling back.`);
+                    modelToSelect = models.includes(DEFAULT_FRONTEND_MODEL) 
+                                      ? DEFAULT_FRONTEND_MODEL 
+                                      : models[0];
+                    console.log("[populateModels] Fallback model selected:", modelToSelect);
+                } else {
+                    console.log("[populateModels] Using saved model:", modelToSelect);
+                }
+
                 models.forEach(modelName => {
                     const option = document.createElement('option');
                     option.value = modelName;
                     option.textContent = modelName;
-                    if (modelName === DEFAULT_FRONTEND_MODEL) {
+                    if (modelName === modelToSelect) {
                         option.selected = true;
-                        defaultModelFound = true;
+                        console.log(`[populateModels] Setting '${modelName}' as selected.`);
                     }
                     modelSelectElement.appendChild(option);
                 });
-                if (!defaultModelFound && modelSelectElement.options.length > 0) {
-                     modelSelectElement.options[0].selected = true; // Select first if default not found
-                }
             }
         } else {
             console.error("Failed to fetch models:", response.status);
@@ -250,28 +286,38 @@ async function populateModels() {
     }
 }
 
+// Save model selection to localStorage
+if (modelSelectElement) {
+    modelSelectElement.addEventListener('change', () => {
+        const selectedValue = modelSelectElement.value;
+        localStorage.setItem(SAVED_MODEL_KEY, selectedValue);
+        console.log(`[modelSelect Change] Saved '${selectedValue}' to localStorage for key '${SAVED_MODEL_KEY}'.`);
+    });
+} else {
+    console.log("[Setup] modelSelectElement is null, cannot add change listener.");
+}
+
 populateModels();
 
 // Clear chat button logic
 if (clearChatButton) {
     clearChatButton.addEventListener('click', async () => {
-        if (confirm("Are you sure you want to clear all chat history?")) {
-            if(spinner) spinner.classList.add('active');
-            if (errorElement) errorElement.classList.add('d-none'); // Hide error
-            try {
-                const response = await fetch('/chat/', { method: 'DELETE' })
-                if (response.ok) {
-                    if (convElement) convElement.innerHTML = '' // Clear frontend display
-                } else {
-                    const errorText = await response.text();
-                    console.error('Failed to clear chat history:', response.status, errorText)
-                    alert(`Failed to clear chat history: ${errorText}`)
-                }
-            } catch (error) {
-                console.error('Error clearing chat history:', error)
-                onError(error) // Reuse existing error display logic
+        if(spinner) spinner.classList.add('active');
+        if (errorElement) errorElement.classList.add('d-none'); // Hide error
+        try {
+            const response = await fetch('/chat/', { method: 'DELETE' });
+            if (response.ok) {
+                if (convElement) convElement.innerHTML = ''; // Clear frontend display
+            } else {
+                const errorText = await response.text();
+                console.error('Failed to clear chat history:', response.status, errorText);
+                // Consider a less intrusive way to show this error if needed
+                alert(`Failed to clear chat history: ${errorText}`); 
             }
-            if(spinner) spinner.classList.remove('active')
+        } catch (error) {
+            console.error('Error clearing chat history:', error);
+            onError(error); // Reuse existing error display logic
         }
-    })
+        if(spinner) spinner.classList.remove('active');
+    });
 } 

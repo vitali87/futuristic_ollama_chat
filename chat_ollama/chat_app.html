@@ -13,41 +13,48 @@
         --font-accent: 'Orbitron', sans-serif; /* Futuristic font for accents */
 
         /* Light Theme */
-        --bg-color-light: #eef2f7; /* Lighter, cooler background */
-        --text-color-light: #2c3e50; /* Dark blue-grey text */
+        --bg-color-light: #f4f7f9; /* Softer light background */
+        --text-color-light: #333333; /* Darker grey for better contrast */
         --container-bg-light: #ffffff;
-        --border-color-light: #dce1e8;
-        --primary-color-light: #3672f8; /* Vibrant blue */
+        --border-color-light: #e0e5eb; /* Lighter border */
+        --primary-color-light: #007bff; /* Standard vibrant blue */
         --primary-text-color-light: #ffffff;
-        --secondary-bg-color-light: #e9ecef;
-        --secondary-text-color-light: #34495e;
+        --secondary-bg-color-light: #f8f9fa; /* Very light grey for model messages */
+        --secondary-text-color-light: #495057;
         --input-bg-light: #ffffff;
         --input-border-light: #ced4da;
-        --shadow-color-light: rgba(44, 62, 80, 0.15);
-        --hover-brightness-light: 0.9;
-        --link-color-light: #2980b9;
-        --icon-color-light: #34495e;
-        --danger-color-light: #e74c3c;
-        --danger-hover-light: #c0392b;
+        --shadow-color-light: rgba(0, 0, 0, 0.1); /* Softer shadow */
+        --hover-brightness-light: 0.95;
+        --link-color-light: #0056b3;
+        --icon-color-light: #555555;
+        --danger-color-light: #dc3545;
+        --danger-hover-light: #c82333;
+        --border-radius-sm: 6px; /* Small border radius */
+        --border-radius-md: 10px; /* Medium border radius */
+        --border-radius-lg: 16px; /* Large border radius for main container */
+    }
+
+    .d-none {
+        display: none !important;
     }
 
     .dark-theme {
-        --bg-color-dark: #0d1117; /* Very dark blue/black */
-        --text-color-dark: #c9d1d9; /* Light grey text */
-        --container-bg-dark: #161b22; /* Slightly lighter dark for container */
-        --border-color-dark: #30363d; /* Subtle border */
-        --primary-color-dark: #58a6ff; /* Bright blue for dark mode */
-        --primary-text-color-dark: #0d1117;
-        --secondary-bg-color-dark: #21262d;
-        --secondary-text-color-dark: #c9d1d9;
-        --input-bg-dark: #0d1117;
-        --input-border-dark: #30363d;
-        --shadow-color-dark: rgba(0, 0, 0, 0.4);
-        --hover-brightness-dark: 1.15;
-        --link-color-dark: #58a6ff;
-        --icon-color-dark: #8b949e;
-        --danger-color-dark: #f85149;
-        --danger-hover-dark: #da3633;
+        --bg-color-dark: #12181b; /* Deep, cool dark blue */
+        --text-color-dark: #e1e8ed; /* Light, soft cyan-grey */
+        --container-bg-dark: #1a2025; /* Slightly lighter dark for container */
+        --border-color-dark: #2c353c; /* Subtle, cool-toned border */
+        --primary-color-dark: #0095ff; /* Vibrant, modern blue */
+        --primary-text-color-dark: #ffffff;
+        --secondary-bg-color-dark: #222a30; /* Darker, distinct secondary background */
+        --secondary-text-color-dark: #b0bac0; /* Lighter grey for model message text */
+        --input-bg-dark: #1f252a; /* Darker input background */
+        --input-border-dark: #353f46; /* Slightly more visible input border */
+        --shadow-color-dark: rgba(0, 0, 0, 0.3); /* Softer, more diffused shadow */
+        --hover-brightness-dark: 1.1;
+        --link-color-dark: #0095ff;
+        --icon-color-dark: #909da4;
+        --danger-color-dark: #ff4d4d; /* Brighter red for danger */
+        --danger-hover-dark: #e63939;
     }
 
     /* Apply current theme variables */
@@ -68,6 +75,7 @@
         --icon-color: var(--icon-color-light);
         --danger-color: var(--danger-color-light);
         --danger-hover: var(--danger-hover-light);
+        --border-radius: var(--border-radius-md); /* Default border radius */
     }
 
     body.dark-theme {
@@ -91,7 +99,7 @@
 
     * {
         box-sizing: border-box;
-        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
     body {
@@ -107,15 +115,15 @@
     }
     main {
       background-color: var(--container-bg);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px var(--shadow-color);
+      border-radius: var(--border-radius-lg); /* Use variable */
+      box-shadow: 0 8px 25px var(--shadow-color); /* Softer shadow */
       width: 100%;
       max-width: 800px;
       display: flex;
       flex-direction: column;
       height: calc(100vh - 3rem);
       max-height: 900px;
-      overflow: hidden; /* Prevents content from breaking border radius */
+      overflow: hidden;
     }
     .chat-header {
       padding: 1rem 1.5rem;
@@ -123,15 +131,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: color-mix(in srgb, var(--container-bg) 90%, transparent);
-      /* backdrop-filter: blur(5px); uncomment if you want glassmorphism but be mindful of performance */
+      background-color: color-mix(in srgb, var(--container-bg) 95%, transparent);
     }
     .chat-header-left h1 {
         font-family: var(--font-accent);
-        font-size: 1.6rem;
+        font-size: 1.5rem; /* Slightly smaller for sleekness */
         font-weight: 500;
         color: var(--primary-color);
-        margin-bottom: 0;
+        margin: 0; /* Removed margin-bottom */
         letter-spacing: 0.5px;
     }
     .chat-header-right {
@@ -151,7 +158,7 @@
     }
     .theme-switch input { display:none; }
     .slider {
-      background-color: var(--secondary-bg-color); /* Use theme color */
+      background-color: var(--secondary-bg-color);
       border: 1px solid var(--border-color);
       bottom: 0;
       cursor: pointer;
@@ -163,7 +170,7 @@
       border-radius: 22px;
     }
     .slider:before {
-      background-color: var(--container-bg); /* Knob color */
+      background-color: var(--container-bg);
       border: 1px solid var(--border-color);
       bottom: 2px;
       content: "";
@@ -173,7 +180,7 @@
       transition: .4s;
       width: 16px;
       border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     input:checked + .slider {
       background-color: var(--primary-color);
@@ -181,22 +188,31 @@
     }
     input:checked + .slider:before {
       transform: translateX(18px);
-      background-color: var(--primary-text-color); /* Knob color on active */
+      background-color: var(--primary-text-color);
     }
 
     #model-select {
         min-width: 180px;
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem; /* Slightly larger for readability */
+        padding: 0.6rem 1rem; /* Adjusted padding */
         background-color: var(--input-bg);
         color: var(--text-color);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
+        border-radius: var(--border-radius-md); /* Consistent radius */
+        appearance: none; /* Remove default styling */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1em;
+        padding-right: 2.5rem; /* Space for custom arrow */
+    }
+    body.dark-theme #model-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23e1e8ed' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
     }
     #model-select:focus {
         outline: none;
         border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent);
     }
 
     #conversation {
@@ -205,27 +221,31 @@
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem; /* Increased gap */
+      gap: 1rem; /* Slightly reduced gap */
     }
     .message {
-      padding: 0.9rem 1.4rem;
-      border-radius: 12px;
-      max-width: 78%;
+      padding: 0.8rem 1.2rem; /* Adjusted padding */
+      border-radius: var(--border-radius-md);
+      max-width: 80%; /* Slightly increased max-width */
       word-wrap: break-word;
-      line-height: 1.6;
+      line-height: 1.55;
       position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle shadow on messages */
+    }
+    body.dark-theme .message {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
     .message.user {
       background-color: var(--primary-color);
       color: var(--primary-text-color);
       align-self: flex-end;
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: var(--border-radius-sm); /* Sharper edge for distinction */
     }
     .message.model {
       background-color: var(--secondary-bg-color);
       color: var(--secondary-text-color);
       align-self: flex-start;
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: var(--border-radius-sm);
     }
     .message-content p:last-child {
         margin-bottom: 0;
@@ -233,118 +253,179 @@
     #conversation .user::before, #conversation .model::before { content: none; }
     .message-meta {
         font-size: 0.7rem;
-        opacity: 0.7;
-        margin-top: 0.4rem;
-        display: block; /* Ensure it takes its own line if needed */
+        opacity: 0.6; /* Slightly less opacity for subtlety */
+        margin-top: 0.3rem;
+        display: block;
     }
     .message.user .message-meta {
-        color: var(--primary-text-color);
+        color: color-mix(in srgb, var(--primary-text-color) 80%, transparent);
         text-align: right;
     }
     .message.model .message-meta {
-        color: var(--text-color);
+        color: color-mix(in srgb, var(--text-color) 80%, transparent);
         text-align: left;
     }
 
     .chat-input-area {
       padding: 1rem 1.5rem;
       border-top: 1px solid var(--border-color);
-      background-color: var(--container-bg);
+      background-color: var(--container-bg); /* Ensure it matches */
+      display: flex; /* Use flexbox for layout */
+      flex-direction: column; /* Stack elements vertically */
+      gap: 0.75rem; /* Add gap between input rows */
     }
-    .form-control, .form-select {
-        border-radius: 10px;
+
+    .input-row {
+        display: flex;
+        gap: 0.75rem;
+        align-items: stretch; /* Make items in a row same height */
+    }
+
+    .input-row > .form-control {
+        flex-grow: 1; /* Textarea takes available space */
+    }
+
+    .form-control, .form-select { /* Base styles for inputs/selects */
+        border-radius: var(--border-radius-md);
         border: 1px solid var(--input-border);
         background-color: var(--input-bg);
         color: var(--text-color);
-        padding: 0.9rem 1.1rem;
+        padding: 0.8rem 1rem; /* Standardized padding */
         font-size: 0.95rem;
         line-height: 1.5;
+        height: auto; /* Allow natural height */
     }
     .form-control::placeholder {
-        color: color-mix(in srgb, var(--text-color) 60%, transparent);
+        color: color-mix(in srgb, var(--text-color) 65%, transparent); /* Improved visibility */
     }
     .form-control:focus, .form-select:focus {
         border-color: var(--primary-color);
         outline: none;
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent); /* Consistent focus */
     }
     textarea.form-control {
         resize: none;
-        min-height: 48px; /* Base height for one line + padding */
+        min-height: 52px; /* Slightly taller base height, about 2 lines with padding */
+        padding-top: 0.9rem; /* More balanced padding for textarea */
+        padding-bottom: 0.9rem;
+        flex-grow: 1; /* Ensure it can grow if in a flex container */
     }
+
+    /* File input specific styling */
+    #document-input-wrapper {
+        display: flex;
+        flex-grow: 1; /* Take available space in the row */
+        border: 1px solid var(--input-border);
+        border-radius: var(--border-radius-md);
+        background-color: var(--input-bg);
+        overflow: hidden; /* To contain the button */
+        align-items: center; /* Vertically align items */
+    }
+    #document-input-wrapper:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent);
+    }
+
     #document-input {
-        font-size: 0.85rem;
-        padding: 0.6rem 0.9rem;
+        font-size: 0.9rem;
         color: var(--text-color);
+        flex-grow: 1; /* Allow text to take space */
+        padding: 0.75rem 0rem 0.75rem 1rem; /* Adjust padding */
+        min-width: 0; /* Important for flex items */
+        border: none; /* Remove default border */
+        background: transparent; /* Transparent background */
     }
+    #document-input:focus {
+        outline: none; /* Remove focus outline from the input itself */
+        box-shadow: none;
+    }
+
     #document-input::file-selector-button {
         background-color: var(--secondary-bg-color);
         color: var(--text-color);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        padding: 0.4rem 0.8rem;
+        border: none; /* Remove border */
+        border-right: 1px solid var(--input-border); /* Separator line */
+        border-radius: 0; /* No radius for the button part */
+        padding: 0.75rem 1rem; /* Match overall input padding vertically */
         margin-right: 0.8rem;
         cursor: pointer;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
-    #document-input::file-selector-button:hover {
-        background-color: var(--border-color);
-    }
-    .btn {
-        border-radius: 8px;
-        padding: 0.8rem 1.5rem;
+        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         font-weight: 500;
-        font-size: 0.9rem;
-        border: none;
-        transition: filter 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        height: 100%; /* Make button full height of wrapper */
+        white-space: nowrap;
+    }
+
+    body.light-theme #document-input::file-selector-button:hover {
+        background-color: var(--border-color-light);
+        border-color: color-mix(in srgb, var(--border-color-light) 80%, black);
+    }
+    body.dark-theme #document-input::file-selector-button {
+        border-right: 1px solid var(--input-border-dark);
+    }
+    body.dark-theme #document-input::file-selector-button:hover {
+        background-color: var(--primary-color-dark);
+        color: var(--primary-text-color-dark);
+        border-color: var(--primary-color-dark);
+    }
+    /* End File input specific styling */
+
+    .btn {
+        border-radius: var(--border-radius-md); /* Consistent radius */
+        padding: 0.75rem 1.4rem; /* Adjusted padding */
+        font-weight: 500;
+        font-size: 0.95rem; /* Consistent font size */
+        border: 1px solid transparent; /* Base border for outline buttons */
+        transition: filter 0.15s ease, background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
     .btn-primary {
       background-color: var(--primary-color);
       color: var(--primary-text-color);
+      border-color: var(--primary-color);
     }
     .btn-primary:hover {
       filter: brightness(var(--hover-brightness));
       background-color: color-mix(in srgb, var(--primary-color) 90%, black);
+      border-color: color-mix(in srgb, var(--primary-color) 90%, black);
     }
     .btn-outline-danger {
         background-color: transparent;
         border: 1px solid var(--danger-color);
         color: var(--danger-color);
-        padding: 0.5rem 1rem; /* Smaller padding for clear button */
-        font-size: 0.8rem;
+        padding: 0.6rem 1.2rem; /* Slightly adjusted */
+        font-size: 0.9rem;
     }
     .btn-outline-danger:hover {
         background-color: var(--danger-color);
-        color: var(--primary-text-color);
+        color: var(--primary-text-color); /* Use primary text for contrast */
         border-color: var(--danger-color);
     }
     #spinner {
       opacity: 0;
-      transition: opacity 300ms ease-in-out;
+      transition: opacity 0.2s ease-in-out; /* Faster transition */
       width: 20px;
       height: 20px;
-      border: 2.5px solid var(--primary-color);
+      border: 3px solid var(--primary-color); /* Thicker border */
       border-bottom-color: transparent;
       border-radius: 50%;
-      animation: rotation 0.7s linear infinite;
+      animation: rotation 0.8s linear infinite; /* Slightly faster */
       margin: 0 auto;
     }
     @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     #spinner.active { opacity: 1; }
     .button-group {
-        display: flex; 
-        justify-content: flex-end; 
-        align-items: center; 
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         gap: 0.75rem;
     }
-    #conversation::-webkit-scrollbar { width: 8px; }
+    #conversation::-webkit-scrollbar { width: 6px; } /* Slimmer scrollbar */
     #conversation::-webkit-scrollbar-track { background: transparent; }
     #conversation::-webkit-scrollbar-thumb {
         background: var(--border-color);
-        border-radius: 8px;
+        border-radius: var(--border-radius-sm);
     }
-    #conversation::-webkit-scrollbar-thumb:hover { 
-        background: color-mix(in srgb, var(--border-color) 70%, var(--text-color)); 
+    #conversation::-webkit-scrollbar-thumb:hover {
+        background: color-mix(in srgb, var(--border-color) 70%, var(--text-color));
     }
   </style>
 </head>
@@ -371,24 +452,22 @@
       <div id="spinner"></div>
     </div>
     <div class="chat-input-area">
-        <form method="post" enctype="multipart/form-data">
-        <div class="mb-2">
-            <textarea id="prompt-input" name="prompt" class="form-control" placeholder="Type your message or drop a file..." rows="1"></textarea>
-        </div>
-        <div class="row gx-2 align-items-center">
-            <div class="col">
-                <input id="document-input" name="document" type="file" class="form-control" />
+        <form method="post" enctype="multipart/form-data" id="chat-form">
+            <div class="input-row mb-2"> <!-- Textarea row -->
+                <textarea id="prompt-input" name="prompt" class="form-control" placeholder="Type your message or drop a file..." rows="1"></textarea>
             </div>
-            <div class="col-auto button-group">
-                <button type="button" id="clear-chat-btn" class="btn btn-outline-danger">Clear</button>
-                <button class="btn btn-primary">Send</button>
+            <div class="input-row align-items-center"> <!-- File input and buttons row -->
+                <div id="document-input-wrapper"> <!-- Wrapper for file input -->
+                    <input id="document-input" name="document" type="file" class="" /> <!-- Removed form-control from here -->
+                </div>
+                <div class="button-group">
+                    <button type="button" id="clear-chat-btn" class="btn btn-outline-danger">Clear</button>
+                    <button type="submit" class="btn btn-primary">Send</button> <!-- Changed to type="submit" -->
+                </div>
             </div>
-        </div>
         </form>
     </div>
-    <div id="error" class="d-none text-danger p-3 text-center">
-      Error occurred, check the browser developer console for more information.
-    </div>
+
   </main>
 </body>
 </html>
@@ -429,7 +508,7 @@
         const spinnerEl = document.getElementById('spinner');
         if(errorEl) {
             errorEl.textContent = "Failed to load application script. " + (e.message || "Unknown error");
-            errorEl.classList.remove('d-none');
+            // errorEl.classList.remove('d-none'); // <--- Commented out this line
         }
         if(spinnerEl) spinnerEl.classList.remove('active');
       }

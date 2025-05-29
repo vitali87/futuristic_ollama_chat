@@ -13,12 +13,11 @@ from pathlib import Path
 from typing import Annotated, Any, Callable, Literal, TypeVar
 
 import fastapi
-# import logfire # Removed logfire
 from fastapi import Depends, Request, File, UploadFile
 from fastapi.responses import FileResponse, Response, StreamingResponse
 from typing_extensions import LiteralString, ParamSpec, TypedDict
 
-import ollama # Added ollama import
+import ollama
 
 from pydantic_ai import Agent, BinaryContent
 from pydantic_ai.exceptions import UnexpectedModelBehavior
@@ -33,25 +32,15 @@ from pydantic_ai.messages import (
     UserPromptPart,
 )
 
-# Configure Ollama model - This global agent is no longer used directly in post_chat
-# We keep ollama_model definition for potential other uses or as a reference
-# ollama_model = OpenAIModel(
-#     model_name='qwen2.5vl:72b-q4_K_M', 
-#     provider=OpenAIProvider(base_url='http://localhost:11434/v1')
-# )
-# agent = Agent(ollama_model) # This global agent is removed
-DEFAULT_MODEL_NAME = 'qwen2.5vl:72b-q4_K_M' # Define a default model
+DEFAULT_MODEL_NAME = 'qwen2.5-coder:7b' # Define a default model
 
 THIS_DIR = Path(__file__).parent
 
 
 @asynccontextmanager
 async def lifespan(_app: fastapi.FastAPI) -> AsyncIterator[dict[str, Any]]:
-    # Removed 'db': db from yield as Database class will be simplified
-    # We might not need the lifespan for db if we simplify it further
-    # For now, let's keep it simple and connect directly or remove if unused
-    async with Database.connect() as db: # This might change based on Database simplification
-        yield {'db': db} # Keep for now, will adjust with Database changes
+    async with Database.connect() as db:
+        yield {'db': db}
 
 
 app = fastapi.FastAPI(lifespan=lifespan)
@@ -132,6 +121,20 @@ def to_chat_message(m: ModelMessage) -> ChatMessage:
     raise UnexpectedModelBehavior(f'Unexpected message type for chat app: {m}')
 
 
+# Helper function to create a JSON-formatted error message for streaming
+def _create_error_chat_message_bytes(error_content: str) -> bytes:
+    return (
+        json.dumps(
+            {
+                'role': 'model',
+                'timestamp': datetime.now(tz=timezone.utc).isoformat(),
+                'content': error_content,
+            }
+        ).encode('utf-8')
+        + b'\n'
+    )
+
+
 @app.post('/chat/')
 async def post_chat(
     prompt: Annotated[str, fastapi.Form()],
@@ -164,6 +167,11 @@ async def post_chat(
         current_model_name = model_name or DEFAULT_MODEL_NAME
 
         # Create a new agent instance for each request with the selected model
+        async def handle_model_init_error(exc: Exception, model_name_str: str) -> AsyncIterator[bytes]:
+            err_msg = f"[SYSTEM ERROR] Could not initialize model '{model_name_str}': {exc}"
+            print(err_msg)
+            yield _create_error_chat_message_bytes(err_msg)
+
         try:
             selected_ollama_model = OpenAIModel(
                 model_name=current_model_name,
@@ -171,21 +179,8 @@ async def post_chat(
             )
             current_agent = Agent(selected_ollama_model)
         except Exception as e:
-            # Handle model initialization error, e.g., model name not found by Ollama
-            # Send an error message back to the client or log extensively
-            error_message = f"Error initializing model '{current_model_name}': {e}"
-            print(error_message)
-            # Stream an error message to the client
-            yield (
-                json.dumps(
-                    {
-                        'role': 'model',
-                        'timestamp': datetime.now(tz=timezone.utc).isoformat(),
-                        'content': f"[SYSTEM ERROR] Could not initialize model: {error_message}",
-                    }
-                ).encode('utf-8')
-                + b'\n'
-            )
+            async for error_chunk in handle_model_init_error(e, current_model_name):
+                yield error_chunk
             return # Stop further processing for this request
 
         # Use the pre-read document content
