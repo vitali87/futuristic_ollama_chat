@@ -1,5 +1,7 @@
 # Futuristic Ollama Chat
 
+![Futuristic Ollama Chat UI](./ui.png)
+
 A sleek, futuristic-themed AI chat application powered by Ollama for local large language model integration. Built with a Python/FastAPI backend using Pydantic AI, and a dynamic TypeScript frontend.
 
 ## Features
@@ -55,8 +57,6 @@ A sleek, futuristic-themed AI chat application powered by Ollama for local large
     The application will typically be available at `http://127.0.0.1:8000`.
 
 ## Screenshot
-
-![Futuristic Ollama Chat UI](./ui.png)
 
 ---
 
