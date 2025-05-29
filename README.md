@@ -57,9 +57,3 @@ A sleek, futuristic-themed AI chat application powered by Ollama for local large
     python main.py
     ```
     The application will typically be available at `http://127.0.0.1:8000`.
-
-## Screenshot
-
----
-
-**Note:** Ensure you have a screenshot named `ui.png` in the root of your project directory for it to display correctly.
