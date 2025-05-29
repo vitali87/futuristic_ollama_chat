@@ -149,6 +149,46 @@ function addMessages(responseText: string) {
                 contentDiv.innerHTML = htmlContent;
             }
         }
+
+        // Add copy button to pre elements
+        const preElements = msgDiv.querySelectorAll('pre');
+        preElements.forEach(pre => {
+            // Prevent adding multiple buttons if message is updated
+            if (pre.parentNode && (pre.parentNode as HTMLElement).classList.contains('code-block-wrapper')) {
+                // Already wrapped, button should exist or be handled by existing wrapper
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            // wrapper.style.position = 'relative'; // Set via CSS class instead
+            wrapper.className = 'code-block-wrapper'; // Class for styling the wrapper
+
+            const btn = document.createElement('button');
+            btn.textContent = 'Copy';
+            btn.className = 'copy-code-btn'; // Add class for styling
+            btn.onclick = () => {
+                navigator.clipboard.writeText(pre.innerText)
+                    .then(() => {
+                        btn.textContent = 'Copied!';
+                        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        btn.textContent = 'Error';
+                        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+                    });
+            };
+            
+            // Wrap pre element and add button
+            if (pre.parentNode) {
+                pre.parentNode.insertBefore(wrapper, pre);
+                wrapper.appendChild(pre); // Move pre into wrapper
+                wrapper.appendChild(btn); // Add button to wrapper
+            }
+            // More direct: make pre itself relative and append button inside
+            // pre.style.position = 'relative'; // Ensure pre can contain a positioned button
+            // pre.appendChild(btn);
+        });
     }
     if (convElement) {
         convElement.scrollTop = convElement.scrollHeight;
