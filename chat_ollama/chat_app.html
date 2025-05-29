@@ -203,6 +203,22 @@
       align-self: flex-start;
       border-bottom-left-radius: var(--border-radius-sm);
     }
+    /* Styles for code blocks within messages */
+    .message pre {
+        white-space: pre-wrap; /* Allow wrapping of long lines */
+        word-wrap: break-word; /* Break words if necessary */
+        overflow-x: auto;      /* Add horizontal scroll for very long lines */
+        background-color: rgba(0, 0, 0, 0.2); /* Optional: Slight background for code */
+        padding: 0.5em;        /* Optional: Padding inside code block */
+        border-radius: var(--border-radius-sm); /* Optional: Rounded corners */
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+    .message code {
+        font-family: monospace; /* Use a monospace font for code */
+        font-size: 0.85em;     /* Adjust font size if needed */
+        word-break: break-all; /* More aggressive word breaking if needed */
+    }
     .message-meta {
         font-size: 0.65rem;
         opacity: 0.6;
