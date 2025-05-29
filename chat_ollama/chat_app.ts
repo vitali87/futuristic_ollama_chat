@@ -268,7 +268,7 @@ async function populateModels() {
                 models.forEach(modelName => {
                     const option = document.createElement('option');
                     option.value = modelName;
-                    option.textContent = modelName;
+                    option.textContent = formatModelName(modelName);
                     if (modelName === modelToSelect) {
                         option.selected = true;
                         console.log(`[populateModels] Setting '${modelName}' as selected.`);
@@ -284,6 +284,31 @@ async function populateModels() {
         console.error("Error fetching or populating models:", error);
         modelSelectElement.innerHTML = '<option value="" disabled selected>Error loading models</option>';
     }
+}
+
+// Helper function to format model names for display
+function formatModelName(fullName: string): string {
+    let name = fullName;
+
+    // 1. Remove :latest suffix
+    if (name.endsWith(':latest')) {
+        name = name.substring(0, name.length - ':latest'.length);
+    }
+
+    // 2. Isolate base name (part after last '/')
+    const parts = name.split('/');
+    let baseName = parts[parts.length - 1];
+
+    // 3. Remove common GGUF suffixes (case-insensitive)
+    // Make sure to check for both -GGUF and _GGUF and other variants if they exist
+    const ggufSuffixes = ['-GGUF', '_GGUF']; 
+    for (const suffix of ggufSuffixes) {
+        if (baseName.toUpperCase().endsWith(suffix.toUpperCase())) {
+            baseName = baseName.substring(0, baseName.length - suffix.length);
+            break; // Assuming only one such suffix needs removal
+        }
+    }
+    return baseName;
 }
 
 // Save model selection to localStorage

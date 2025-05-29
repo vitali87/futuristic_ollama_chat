@@ -3,103 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ollama Chat</title>
+  <title>AI Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
         --font-primary: 'Inter', sans-serif;
-        --font-accent: 'Orbitron', sans-serif; /* Futuristic font for accents */
+        --font-accent: 'Orbitron', sans-serif;
 
-        /* Light Theme */
-        --bg-color-light: #f4f7f9; /* Softer light background */
-        --text-color-light: #333333; /* Darker grey for better contrast */
-        --container-bg-light: #ffffff;
-        --border-color-light: #e0e5eb; /* Lighter border */
-        --primary-color-light: #007bff; /* Standard vibrant blue */
-        --primary-text-color-light: #ffffff;
-        --secondary-bg-color-light: #f8f9fa; /* Very light grey for model messages */
-        --secondary-text-color-light: #495057;
-        --input-bg-light: #ffffff;
-        --input-border-light: #ced4da;
-        --shadow-color-light: rgba(0, 0, 0, 0.1); /* Softer shadow */
-        --hover-brightness-light: 0.95;
-        --link-color-light: #0056b3;
-        --icon-color-light: #555555;
-        --danger-color-light: #dc3545;
-        --danger-hover-light: #c82333;
-        --border-radius-sm: 6px; /* Small border radius */
-        --border-radius-md: 10px; /* Medium border radius */
-        --border-radius-lg: 16px; /* Large border radius for main container */
+        /* NEON THEME (Inspired by the image) */
+        --neon-cyan: #00e0ff;
+        --neon-cyan-text: #80f5ff; /* Brighter for text */
+        --neon-cyan-dim: #00a0b3;
+        --neon-glow-color: rgba(0, 224, 255, 0.7);
+        --neon-glow-color-soft: rgba(0, 224, 255, 0.4);
+
+        --user-message-bg: #3d8f9b; /* Adjusted teal/blue */
+        --model-message-bg: #9b3d6f; /* Adjusted reddish/pink */
+
+        --dark-bg-primary: #080c13; /* Very dark space blue */
+        --dark-bg-secondary: rgba(10, 20, 35, 0.65); /* Semi-transparent container bg with a hint of blue */
+        --dark-bg-input: rgba(12, 22, 40, 0.5);
+        --dark-bg-input-border: rgba(0, 224, 255, 0.3); /* Subtle input border */
+
+        --text-color-on-dark: #e8eef3;
+        --text-color-placeholder: rgba(128, 245, 255, 0.6); /* Cyan placeholder */
+
+        --border-radius-sm: 4px;
+        --border-radius-md: 8px;
+        --border-radius-lg: 18px; /* Main container rounding */
     }
 
-    .d-none {
-        display: none !important;
-    }
-
-    .dark-theme {
-        --bg-color-dark: #12181b; /* Deep, cool dark blue */
-        --text-color-dark: #e1e8ed; /* Light, soft cyan-grey */
-        --container-bg-dark: #1a2025; /* Slightly lighter dark for container */
-        --border-color-dark: #2c353c; /* Subtle, cool-toned border */
-        --primary-color-dark: #0095ff; /* Vibrant, modern blue */
-        --primary-text-color-dark: #ffffff;
-        --secondary-bg-color-dark: #222a30; /* Darker, distinct secondary background */
-        --secondary-text-color-dark: #b0bac0; /* Lighter grey for model message text */
-        --input-bg-dark: #1f252a; /* Darker input background */
-        --input-border-dark: #353f46; /* Slightly more visible input border */
-        --shadow-color-dark: rgba(0, 0, 0, 0.3); /* Softer, more diffused shadow */
-        --hover-brightness-dark: 1.1;
-        --link-color-dark: #0095ff;
-        --icon-color-dark: #909da4;
-        --danger-color-dark: #ff4d4d; /* Brighter red for danger */
-        --danger-hover-dark: #e63939;
-    }
-
-    /* Apply current theme variables */
+    /* Force dark theme as the only theme */
     body {
-        --bg-color: var(--bg-color-light);
-        --text-color: var(--text-color-light);
-        --container-bg: var(--container-bg-light);
-        --border-color: var(--border-color-light);
-        --primary-color: var(--primary-color-light);
-        --primary-text-color: var(--primary-text-color-light);
-        --secondary-bg-color: var(--secondary-bg-color-light);
-        --secondary-text-color: var(--secondary-text-color-light);
-        --input-bg: var(--input-bg-light);
-        --input-border: var(--input-border-light);
-        --shadow-color: var(--shadow-color-light);
-        --hover-brightness: var(--hover-brightness-light);
-        --link-color: var(--link-color-light);
-        --icon-color: var(--icon-color-light);
-        --danger-color: var(--danger-color-light);
-        --danger-hover: var(--danger-hover-light);
-        --border-radius: var(--border-radius-md); /* Default border radius */
+        --bg-color: var(--dark-bg-primary);
+        --text-color: var(--text-color-on-dark);
+        --container-bg: var(--dark-bg-secondary);
+        --border-color: var(--neon-cyan-dim); /* Neon border for elements */
+        --primary-color: var(--neon-cyan);
+        --primary-text-color: var(--dark-bg-primary);
+        --secondary-bg-color: var(--model-message-bg); /* Used for model messages */
+        --secondary-text-color: var(--text-color-on-dark);
+        --input-bg: var(--dark-bg-input);
+        --input-border: var(--dark-bg-input-border);
+        --shadow-color: var(--neon-glow-color); /* Main glow effect */
+        --link-color: var(--neon-cyan-text);
+        --icon-color: var(--neon-cyan-text);
+        --danger-color: #ff3d71; /* Neon-ish red */
+        --danger-hover: #ff638f;
+        --border-radius: var(--border-radius-md);
     }
-
-    body.dark-theme {
-        --bg-color: var(--bg-color-dark);
-        --text-color: var(--text-color-dark);
-        --container-bg: var(--container-bg-dark);
-        --border-color: var(--border-color-dark);
-        --primary-color: var(--primary-color-dark);
-        --primary-text-color: var(--primary-text-color-dark);
-        --secondary-bg-color: var(--secondary-bg-color-dark);
-        --secondary-text-color: var(--secondary-text-color-dark);
-        --input-bg: var(--input-bg-dark);
-        --input-border: var(--input-border-dark);
-        --shadow-color: var(--shadow-color-dark);
-        --hover-brightness: var(--hover-brightness-dark);
-        --link-color: var(--link-color-dark);
-        --icon-color: var(--icon-color-dark);
-        --danger-color: var(--danger-color-dark);
-        --danger-hover: var(--danger-hover-dark);
-    }
+    /* Remove .dark-theme class specific overrides as these are now default */
 
     * {
         box-sizing: border-box;
-        transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     body {
@@ -112,328 +71,290 @@
       min-height: 100vh;
       margin: 0;
       padding: 1rem;
+      /* Optional: Add a subtle starry background if desired */
+      /* background-image: url('starry_background.png'); */
     }
     main {
       background-color: var(--container-bg);
-      border-radius: var(--border-radius-lg); /* Use variable */
-      box-shadow: 0 8px 25px var(--shadow-color); /* Softer shadow */
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 0 20px var(--shadow-color), 0 0 30px var(--shadow-color), 0 0 5px var(--neon-cyan) inset;
+      border: 1.5px solid var(--neon-cyan);
       width: 100%;
-      max-width: 800px;
+      max-width: 500px; /* Narrower for phone-like appearance */
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 3rem);
-      max-height: 900px;
+      height: calc(100vh - 4rem); /* Adjust height */
+      max-height: 800px;
       overflow: hidden;
+      backdrop-filter: blur(10px); /* Glassmorphism effect */
     }
     .chat-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--neon-cyan-dim);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: color-mix(in srgb, var(--container-bg) 95%, transparent);
+      background-color: transparent; /* Header is part of the glass */
+      flex-shrink: 0;
     }
     .chat-header-left h1 {
         font-family: var(--font-accent);
-        font-size: 1.5rem; /* Slightly smaller for sleekness */
-        font-weight: 500;
-        color: var(--primary-color);
-        margin: 0; /* Removed margin-bottom */
-        letter-spacing: 0.5px;
+        font-size: 1.8rem; /* Larger, more prominent */
+        font-weight: 700; /* Bolder */
+        color: var(--neon-cyan-text);
+        margin: 0;
+        letter-spacing: 1.5px;
+        text-shadow: 0 0 8px var(--neon-glow-color-soft), 0 0 3px var(--neon-cyan);
     }
     .chat-header-right {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 0.75rem;
     }
-    .theme-switch-wrapper {
-      display: flex;
-      align-items: center;
-    }
-    .theme-switch {
-      display: inline-block;
-      height: 22px;
-      position: relative;
-      width: 40px;
-    }
-    .theme-switch input { display:none; }
-    .slider {
-      background-color: var(--secondary-bg-color);
-      border: 1px solid var(--border-color);
-      bottom: 0;
-      cursor: pointer;
-      left: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
-      transition: .4s;
-      border-radius: 22px;
-    }
-    .slider:before {
-      background-color: var(--container-bg);
-      border: 1px solid var(--border-color);
-      bottom: 2px;
-      content: "";
-      height: 16px;
-      left: 3px;
-      position: absolute;
-      transition: .4s;
-      width: 16px;
-      border-radius: 50%;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    input:checked + .slider {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-    input:checked + .slider:before {
-      transform: translateX(18px);
-      background-color: var(--primary-text-color);
-    }
-
+    /* Styling for select and theme toggle to match new theme */
     #model-select {
-        min-width: 180px;
-        font-size: 0.9rem; /* Slightly larger for readability */
-        padding: 0.6rem 1rem; /* Adjusted padding */
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius-md); /* Consistent radius */
-        appearance: none; /* Remove default styling */
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        min-width: auto; /* Allow shrinking */
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+        padding-right: 1.8rem; /* Space for arrow */
+        background-color: rgba(0,0,0,0.3);
+        color: var(--neon-cyan-text);
+        border: 1px solid var(--neon-cyan-dim);
+        border-radius: var(--border-radius-sm);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%2300e0ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
-        background-position: right 0.75rem center;
-        background-size: 1em;
-        padding-right: 2.5rem; /* Space for custom arrow */
-    }
-    body.dark-theme #model-select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23e1e8ed' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        background-position: right 0.5rem center;
+        background-size: 0.8em;
+        box-shadow: 0 0 5px var(--neon-glow-color-soft) inset;
     }
     #model-select:focus {
         outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 8px var(--neon-glow-color), 0 0 3px var(--neon-cyan) inset;
     }
+    .theme-switch-wrapper { /* Hide original theme switch, replace with hamburger if needed */
+      display: none; /* Per image, no theme switch here */
+    }
+
+    /* AI Avatar Styling */
+    .ai-avatar-container {
+        display: flex;
+        justify-content: center;
+        padding: 0.5rem 0; /* Reduced padding */
+        margin-top: 0.25rem;
+        margin-bottom: 0.5rem;
+        flex-shrink: 0;
+    }
+    .ai-avatar-image-placeholder {
+        width: 70px; /* Avatar size */
+        height: 70px;
+        border-radius: 50%;
+        background-color: var(--neon-cyan-dim); /* Placeholder color */
+        border: 2px solid var(--neon-cyan);
+        box-shadow: 0 0 12px var(--neon-glow-color), 0 0 4px var(--neon-cyan) inset;
+        /* For actual image: background-image: url('your-avatar.png'); background-size: cover; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem; /* For placeholder icon/text if any */
+        color: var(--neon-cyan-text);
+    }
+     /* Example of a simple SVG face for placeholder */
+    .ai-avatar-image-placeholder::before {
+        content: 'AI'; /* Or an SVG icon */
+        font-family: var(--font-accent);
+        font-weight: 500;
+        font-size: 1.2rem;
+        opacity: 0.7;
+    }
+
 
     #conversation {
       flex-grow: 1;
       overflow-y: auto;
-      padding: 1.5rem;
+      padding: 0.75rem 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem; /* Slightly reduced gap */
+      gap: 0.9rem;
     }
     .message {
-      padding: 0.8rem 1.2rem; /* Adjusted padding */
+      padding: 0.7rem 1.1rem;
       border-radius: var(--border-radius-md);
-      max-width: 80%; /* Slightly increased max-width */
+      max-width: 80%;
       word-wrap: break-word;
-      line-height: 1.55;
+      line-height: 1.5;
       position: relative;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle shadow on messages */
-    }
-    body.dark-theme .message {
-        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      color: var(--text-color-on-dark);
     }
     .message.user {
-      background-color: var(--primary-color);
-      color: var(--primary-text-color);
+      /* background-color: var(--user-message-bg); */
+      background-image: linear-gradient(to right, #58C1D0, #3A9DAF);
       align-self: flex-end;
-      border-bottom-right-radius: var(--border-radius-sm); /* Sharper edge for distinction */
+      border-bottom-right-radius: var(--border-radius-sm);
     }
     .message.model {
-      background-color: var(--secondary-bg-color);
-      color: var(--secondary-text-color);
+      /* background-color: var(--model-message-bg); */
+      /* background-image: linear-gradient(to right, #FDB813, #77D9A0); OLD */
+      /* background-image: linear-gradient(to right, #E87A00, #FABD68, #A7AD5F); OLD 2 */
+      /* background-image: linear-gradient(to right, #B0704F, #E0A060); OLD 3 */
+      background-image: linear-gradient(to right, #D88A5B, #AE5D34);
       align-self: flex-start;
       border-bottom-left-radius: var(--border-radius-sm);
     }
-    .message-content p:last-child {
-        margin-bottom: 0;
-    }
-    #conversation .user::before, #conversation .model::before { content: none; }
     .message-meta {
-        font-size: 0.7rem;
-        opacity: 0.6; /* Slightly less opacity for subtlety */
-        margin-top: 0.3rem;
+        font-size: 0.65rem;
+        opacity: 0.6;
+        margin-top: 0.25rem;
         display: block;
-    }
-    .message.user .message-meta {
-        color: color-mix(in srgb, var(--primary-text-color) 80%, transparent);
-        text-align: right;
-    }
-    .message.model .message-meta {
-        color: color-mix(in srgb, var(--text-color) 80%, transparent);
-        text-align: left;
+        color: rgba(230, 240, 255, 0.7); /* Lighter meta text */
     }
 
     .chat-input-area {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border-color);
-      background-color: var(--container-bg); /* Ensure it matches */
-      display: flex; /* Use flexbox for layout */
-      flex-direction: column; /* Stack elements vertically */
-      gap: 0.75rem; /* Add gap between input rows */
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--neon-cyan-dim);
+      background-color: transparent; /* Input area part of glass */
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      flex-shrink: 0;
     }
-
     .input-row {
         display: flex;
-        gap: 0.75rem;
-        align-items: stretch; /* Make items in a row same height */
+        gap: 0.6rem;
+        align-items: stretch;
     }
+    .input-row > .form-control { flex-grow: 1; }
 
-    .input-row > .form-control {
-        flex-grow: 1; /* Textarea takes available space */
-    }
-
-    .form-control, .form-select { /* Base styles for inputs/selects */
-        border-radius: var(--border-radius-md);
-        border: 1px solid var(--input-border);
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        padding: 0.8rem 1rem; /* Standardized padding */
-        font-size: 0.95rem;
-        line-height: 1.5;
-        height: auto; /* Allow natural height */
-    }
-    .form-control::placeholder {
-        color: color-mix(in srgb, var(--text-color) 65%, transparent); /* Improved visibility */
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: var(--primary-color);
-        outline: none;
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent); /* Consistent focus */
-    }
     textarea.form-control {
+        background-color: var(--input-bg);
+        color: var(--text-color-on-dark);
+        border: 1px solid var(--input-border);
+        border-radius: var(--border-radius-md);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
         resize: none;
-        min-height: 52px; /* Slightly taller base height, about 2 lines with padding */
-        padding-top: 0.9rem; /* More balanced padding for textarea */
-        padding-bottom: 0.9rem;
-        flex-grow: 1; /* Ensure it can grow if in a flex container */
+        min-height: 44px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
+    }
+    textarea.form-control::placeholder {
+        color: var(--text-color-placeholder);
+    }
+    textarea.form-control:focus {
+        border-color: var(--neon-cyan);
+        outline: none;
+        box-shadow: 0 0 8px var(--neon-glow-color-soft), 0 0 0 1px var(--neon-cyan) inset;
+        background-color: rgba(15, 28, 50, 0.7);
     }
 
-    /* File input specific styling */
     #document-input-wrapper {
         display: flex;
-        flex-grow: 1; /* Take available space in the row */
+        flex-grow: 1;
         border: 1px solid var(--input-border);
         border-radius: var(--border-radius-md);
         background-color: var(--input-bg);
-        overflow: hidden; /* To contain the button */
-        align-items: center; /* Vertically align items */
+        overflow: hidden;
+        align-items: center;
     }
     #document-input-wrapper:focus-within {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 25%, transparent);
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 8px var(--neon-glow-color-soft);
     }
-
     #document-input {
-        font-size: 0.9rem;
-        color: var(--text-color);
-        flex-grow: 1; /* Allow text to take space */
-        padding: 0.75rem 0rem 0.75rem 1rem; /* Adjust padding */
-        min-width: 0; /* Important for flex items */
-        border: none; /* Remove default border */
-        background: transparent; /* Transparent background */
+        font-size: 0.8rem;
+        color: var(--neon-cyan-text);
+        flex-grow: 1;
+        padding: 0.6rem 0rem 0.6rem 0.8rem;
+        border: none;
+        background: transparent;
     }
-    #document-input:focus {
-        outline: none; /* Remove focus outline from the input itself */
-        box-shadow: none;
-    }
-
+    #document-input:focus { outline: none; box-shadow: none; }
     #document-input::file-selector-button {
-        background-color: var(--secondary-bg-color);
-        color: var(--text-color);
-        border: none; /* Remove border */
-        border-right: 1px solid var(--input-border); /* Separator line */
-        border-radius: 0; /* No radius for the button part */
-        padding: 0.75rem 1rem; /* Match overall input padding vertically */
-        margin-right: 0.8rem;
+        background-color: var(--neon-cyan-dim);
+        color: var(--dark-bg-primary);
+        border: none;
+        border-right: 1px solid var(--input-border);
+        border-radius: 0;
+        padding: 0.6rem 0.8rem;
+        margin-right: 0.6rem;
         cursor: pointer;
-        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         font-weight: 500;
-        height: 100%; /* Make button full height of wrapper */
-        white-space: nowrap;
+        height: 100%;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
     }
-
-    body.light-theme #document-input::file-selector-button:hover {
-        background-color: var(--border-color-light);
-        border-color: color-mix(in srgb, var(--border-color-light) 80%, black);
+    #document-input::file-selector-button:hover {
+        background-color: var(--neon-cyan);
+        filter: brightness(1.1);
     }
-    body.dark-theme #document-input::file-selector-button {
-        border-right: 1px solid var(--input-border-dark);
-    }
-    body.dark-theme #document-input::file-selector-button:hover {
-        background-color: var(--primary-color-dark);
-        color: var(--primary-text-color-dark);
-        border-color: var(--primary-color-dark);
-    }
-    /* End File input specific styling */
-
+    .button-group { display: flex; gap: 0.6rem; align-items: center; }
     .btn {
-        border-radius: var(--border-radius-md); /* Consistent radius */
-        padding: 0.75rem 1.4rem; /* Adjusted padding */
-        font-weight: 500;
-        font-size: 0.95rem; /* Consistent font size */
-        border: 1px solid transparent; /* Base border for outline buttons */
-        transition: filter 0.15s ease, background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        border-radius: var(--border-radius-md);
+        padding: 0.6rem 1rem;
+        font-weight: 600; /* Bolder buttons */
+        font-size: 0.85rem;
+        border: 1px solid transparent;
+        transition: all 0.15s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
     .btn-primary {
-      background-color: var(--primary-color);
-      color: var(--primary-text-color);
-      border-color: var(--primary-color);
+      background-color: var(--neon-cyan);
+      color: var(--dark-bg-primary);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-glow-color-soft), 0 0 3px var(--neon-cyan) inset;
     }
     .btn-primary:hover {
-      filter: brightness(var(--hover-brightness));
-      background-color: color-mix(in srgb, var(--primary-color) 90%, black);
-      border-color: color-mix(in srgb, var(--primary-color) 90%, black);
+      filter: brightness(1.15);
+      box-shadow: 0 0 15px var(--neon-glow-color), 0 0 5px var(--neon-cyan) inset;
     }
     .btn-outline-danger {
         background-color: transparent;
         border: 1px solid var(--danger-color);
         color: var(--danger-color);
-        padding: 0.6rem 1.2rem; /* Slightly adjusted */
-        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
     }
     .btn-outline-danger:hover {
         background-color: var(--danger-color);
-        color: var(--primary-text-color); /* Use primary text for contrast */
-        border-color: var(--danger-color);
+        color: var(--text-color-on-dark);
+        box-shadow: 0 0 10px var(--danger-color);
     }
     #spinner {
       opacity: 0;
-      transition: opacity 0.2s ease-in-out; /* Faster transition */
+      transition: opacity 0.2s ease-in-out;
       width: 20px;
       height: 20px;
-      border: 3px solid var(--primary-color); /* Thicker border */
+      border: 3px solid var(--neon-cyan);
       border-bottom-color: transparent;
       border-radius: 50%;
-      animation: rotation 0.8s linear infinite; /* Slightly faster */
+      animation: rotation 0.8s linear infinite;
       margin: 0 auto;
     }
     @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     #spinner.active { opacity: 1; }
-    .button-group {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 0.75rem;
-    }
-    #conversation::-webkit-scrollbar { width: 6px; } /* Slimmer scrollbar */
-    #conversation::-webkit-scrollbar-track { background: transparent; }
+
+    #conversation::-webkit-scrollbar { width: 5px; }
+    #conversation::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
     #conversation::-webkit-scrollbar-thumb {
-        background: var(--border-color);
+        background: var(--neon-cyan-dim);
         border-radius: var(--border-radius-sm);
     }
     #conversation::-webkit-scrollbar-thumb:hover {
-        background: color-mix(in srgb, var(--border-color) 70%, var(--text-color));
+        background: var(--neon-cyan);
     }
+    .d-none { display: none !important; } /* Utility class */
   </style>
 </head>
 <body>
   <main>
     <div class="chat-header">
         <div class="chat-header-left">
-            <h1>Ollama Chat</h1>
+            <h1>AI CHAT</h1>
         </div>
         <div class="chat-header-right">
             <select id="model-select" name="model_name" class="form-select form-select-sm" aria-label="Choose Model">
@@ -447,27 +368,29 @@
             </div>
         </div>
     </div>
+    <div class="ai-avatar-container">
+        <div class="ai-avatar-image-placeholder"></div>
+    </div>
     <div id="conversation" class="px-3 py-3"></div>
     <div class="d-flex justify-content-center my-1" style="height: 20px;"> <!-- Spinner container -->
       <div id="spinner"></div>
     </div>
     <div class="chat-input-area">
         <form method="post" enctype="multipart/form-data" id="chat-form">
-            <div class="input-row mb-2"> <!-- Textarea row -->
+            <div class="input-row"> <!-- Textarea only row -->
                 <textarea id="prompt-input" name="prompt" class="form-control" placeholder="Type your message or drop a file..." rows="1"></textarea>
             </div>
             <div class="input-row align-items-center"> <!-- File input and buttons row -->
-                <div id="document-input-wrapper"> <!-- Wrapper for file input -->
-                    <input id="document-input" name="document" type="file" class="" /> <!-- Removed form-control from here -->
+                <div id="document-input-wrapper" class="col">
+                    <input id="document-input" name="document" type="file" class="" />
                 </div>
-                <div class="button-group">
+                <div class="button-group col-auto">
                     <button type="button" id="clear-chat-btn" class="btn btn-outline-danger">Clear</button>
-                    <button type="submit" class="btn btn-primary">Send</button> <!-- Changed to type="submit" -->
+                    <button type="submit" class="btn btn-primary">Send</button>
                 </div>
             </div>
         </form>
     </div>
-
   </main>
 </body>
 </html>
@@ -483,39 +406,37 @@
             throw new Error(`Failed to fetch chat_app.ts: ${response.status}`);
         }
         const tsCode = await response.text();
-        console.log("[HTML] Fetched /chat_app.ts, status:", response.status);
-        console.log("[HTML] Got tsCode, length:", tsCode.length);
+        // console.log("[HTML] Fetched /chat_app.ts, status:", response.status);
+        // console.log("[HTML] Got tsCode, length:", tsCode.length);
         
         const jsCode = window.ts.transpile(tsCode, { target: "es2015" });
-        console.log("[HTML] Transpiled to jsCode, length:", jsCode.length);
+        // console.log("[HTML] Transpiled to jsCode, length:", jsCode.length);
         
         let script = document.createElement('script');
         script.type = 'module';
         script.text = jsCode;
         script.id = 'transpiled-chat-app-script'; // Give it an ID
         
-        // Remove old one if it somehow exists, before adding new one
         const oldScript = document.getElementById('transpiled-chat-app-script');
         if (oldScript) {
             oldScript.remove();
         }
         document.body.appendChild(script);
-        console.log("[HTML] Appended transpiled script to body.");
+        // console.log("[HTML] Appended transpiled script to body.");
 
       } catch (e) {
         console.error("[HTML] Error in loadTs:", e);
-        const errorEl = document.getElementById('error');
+        const errorEl = document.getElementById('error'); // This element doesn't exist.
         const spinnerEl = document.getElementById('spinner');
-        if(errorEl) {
-            errorEl.textContent = "Failed to load application script. " + (e.message || "Unknown error");
-            // errorEl.classList.remove('d-none'); // <--- Commented out this line
-        }
+        // if(errorEl) { // errorEl will be null
+            // errorEl.textContent = "Failed to load application script. " + (e.message || "Unknown error");
+        // }
         if(spinnerEl) spinnerEl.classList.remove('active');
       }
     }
-    console.log("[HTML] Main module script started.");
+    // console.log("[HTML] Main module script started.");
     loadTs();
   } else {
-    console.log("[HTML] Main module script already attempted loading.");
+    // console.log("[HTML] Main module script already attempted loading.");
   }
 </script> 
