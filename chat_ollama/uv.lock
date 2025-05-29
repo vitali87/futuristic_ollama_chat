@@ -184,6 +184,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
+    { name = "ollama" },
     { name = "pydantic-ai" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -191,6 +192,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.100.0,<1.0.0" },
+    { name = "ollama", specifier = ">=0.2.0" },
     { name = "pydantic-ai", specifier = "~=0.2.11" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.20.0,<1.0.0" },
 ]
@@ -748,6 +750,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/23/c1/b3cecb41695fd6cb5483fbb8ecaceb5586346c3ed53a78808d10c1b537c4/mistralai-1.8.1.tar.gz", hash = "sha256:b967ca443726b71ec45632cb33825ee2e55239a652e73c2bda11f7cc683bf6e5", size = 175819 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b0/14/e9ef675928768f508dfcedbb0e0ed601784a6911620a2bc25c9065921420/mistralai-1.8.1-py3-none-any.whl", hash = "sha256:badfc7e6832d894b3e9071d92ad621212b7cccd7df622c6cacdb525162ae338f", size = 373197 },
+]
+
+[[package]]
+name = "ollama"
+version = "0.4.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6f/4d/f46ff3d124ce0805cf728a443cfb0227beb025256cb9276a6f71521c19bd/ollama-0.4.9.tar.gz", hash = "sha256:5266d4d29b5089a01489872b8e8f980f018bccbdd1082b3903448af1d5615ce7", size = 40875 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ee/b6/0c40493c0505652d3da58ad048be19f00c4bdf587140cc578a770d2029d4/ollama-0.4.9-py3-none-any.whl", hash = "sha256:18c8c85358c54d7f73d6a66cda495b0e3ba99fdb88f824ae470d740fbb211a50", size = 13303 },
 ]
 
 [[package]]

@@ -18,6 +18,7 @@ from fastapi import Depends, Request, File, UploadFile
 from fastapi.responses import FileResponse, Response, StreamingResponse
 from typing_extensions import LiteralString, ParamSpec, TypedDict
 
+import ollama # Added ollama import
 
 from pydantic_ai import Agent, BinaryContent
 from pydantic_ai.exceptions import UnexpectedModelBehavior
@@ -32,12 +33,15 @@ from pydantic_ai.messages import (
     UserPromptPart,
 )
 
-# Configure Ollama model
-ollama_model = OpenAIModel(
-    model_name='qwen2.5vl:72b-q4_K_M', # Or your preferred Ollama model
-    provider=OpenAIProvider(base_url='http://localhost:11434/v1')
-)
-agent = Agent(ollama_model) # Using Ollama model
+# Configure Ollama model - This global agent is no longer used directly in post_chat
+# We keep ollama_model definition for potential other uses or as a reference
+# ollama_model = OpenAIModel(
+#     model_name='qwen2.5vl:72b-q4_K_M', 
+#     provider=OpenAIProvider(base_url='http://localhost:11434/v1')
+# )
+# agent = Agent(ollama_model) # This global agent is removed
+DEFAULT_MODEL_NAME = 'qwen2.5vl:72b-q4_K_M' # Define a default model
+
 THIS_DIR = Path(__file__).parent
 
 
@@ -131,6 +135,7 @@ def to_chat_message(m: ModelMessage) -> ChatMessage:
 @app.post('/chat/')
 async def post_chat(
     prompt: Annotated[str, fastapi.Form()],
+    model_name: Annotated[str | None, fastapi.Form()] = None, # Added model_name
     document: Annotated[UploadFile | None, File()] = None,
     database: Database = Depends(get_db),
 ) -> StreamingResponse:
@@ -155,6 +160,34 @@ async def post_chat(
     async def stream_messages() -> AsyncIterator[bytes]:
         user_message_list: list[Any] = [prompt]
 
+        # Determine the model to use for this request
+        current_model_name = model_name or DEFAULT_MODEL_NAME
+
+        # Create a new agent instance for each request with the selected model
+        try:
+            selected_ollama_model = OpenAIModel(
+                model_name=current_model_name,
+                provider=OpenAIProvider(base_url='http://localhost:11434/v1')
+            )
+            current_agent = Agent(selected_ollama_model)
+        except Exception as e:
+            # Handle model initialization error, e.g., model name not found by Ollama
+            # Send an error message back to the client or log extensively
+            error_message = f"Error initializing model '{current_model_name}': {e}"
+            print(error_message)
+            # Stream an error message to the client
+            yield (
+                json.dumps(
+                    {
+                        'role': 'model',
+                        'timestamp': datetime.now(tz=timezone.utc).isoformat(),
+                        'content': f"[SYSTEM ERROR] Could not initialize model: {error_message}",
+                    }
+                ).encode('utf-8')
+                + b'\n'
+            )
+            return # Stop further processing for this request
+
         # Use the pre-read document content
         if doc_bytes_content and doc_media_type_content:
             user_message_list.append(
@@ -175,7 +208,7 @@ async def post_chat(
         )
         
         messages = await database.get_messages()
-        async with agent.run_stream(user_message_list, message_history=messages) as result:
+        async with current_agent.run_stream(user_message_list, message_history=messages) as result:
             async for text_chunk in result.stream(debounce_by=0.01):
                 m = ModelResponse(
                     parts=[TextPart(text_chunk)], timestamp=result.timestamp()
@@ -268,6 +301,27 @@ class Database:
             partial(func, **kwargs),
             *args,
         )
+
+
+# New endpoint to list available Ollama models
+@app.get("/models/")
+async def get_ollama_models() -> Response:
+    try:
+        models_info = ollama.list()
+        model_names = [m.model for m in models_info.models]
+        if not model_names and DEFAULT_MODEL_NAME:
+             # Attempt to ensure the default model is listed if no models are returned
+             # This is a fallback, ideally ollama.list() should be comprehensive
+            try:
+                ollama.show(DEFAULT_MODEL_NAME) # Check if default model exists
+                model_names.append(DEFAULT_MODEL_NAME)
+            except ollama.ResponseError:
+                pass # Default model doesn't exist or Ollama not running
+        return Response(content=json.dumps(model_names), media_type="application/json")
+    except Exception as e:
+        print(f"Error fetching Ollama models: {e}")
+        # Return an empty list or an error response
+        return Response(content=json.dumps([]), media_type="application/json", status_code=500)
 
 
 if __name__ == '__main__':
